@@ -1,6 +1,5 @@
 import express from 'express';
 import http from 'http';
-import bufferify from 'json-bufferify';
 
 const app = express();
 const server = http.createServer(app);

@@ -14,9 +14,10 @@ import { io } from 'socket.io-client';
 const app = express();
 const server = http.createServer(app);
 
+//Create the socket for our frontend
 const int_io : Socket = require('socket.io')(server, {cors: {origin: "http://localhost:3002", methods: ["GET", "POST"]}});
 
-//Create both the internal and external websockets connections
+//connect to the external ws
 const ext_ws = new WebSocket('wss://bad-api-assignment.reaktor.com/rps/live/');
 
 //Create map of clients for the internal ws

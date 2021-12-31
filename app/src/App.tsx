@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import GameList from './components/GameList';
 
@@ -9,11 +8,11 @@ function App() {
     
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <GameList />
-      </header>
+    <div className="App flex justify-center mx-auto space-x-3">       
+      <GameList />
+      <div className="bg-red-900 w-80 justify-center text-center">        
+        History
+      </div>
     </div>
   );
 }

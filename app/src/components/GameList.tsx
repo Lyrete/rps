@@ -1,5 +1,6 @@
 import React from 'react';
 import { io, Socket} from 'socket.io-client';
+import GameRow from './GameRow';
 
 interface IProps {
 }
@@ -9,7 +10,7 @@ interface IState {
   socket?: Socket
 }
 
-interface Game {
+export interface Game {
   gameId: string;
   type: String;
   playerA: {
@@ -38,24 +39,32 @@ class GameList extends React.Component<IProps, IState> {
       }else if(game.type === 'GAME_RESULT'){
         this.resolveGame(game);
       }
-    })
+    });
+    this.setState({socket: socket});
+  }
+
+  componentWillUnmount() {
+    this.state.socket?.close();
   }
 
   newGame(game: Game) {
-    const updated: Array<Game> = this.state.games.concat(game);
-    this.setState({games: updated});
+    var previous: Array<Game> = this.state.games;
+    this.setState({games: [game].concat(previous)});
   }
 
   resolveGame(game: Game) {
-    var updated: Array<Game> = this.state.games.filter(g => g.gameId !== game.gameId)
-    updated = [game].concat(updated);
-    this.setState({games: updated});
+    this.setState({games: this.state.games.map(function(element: Game){
+      if(element.gameId === game.gameId){
+        return game;
+      }
+      return element;
+    })});
 
     //Show result for 5s and then delete
-    setTimeout(() => {
+    /* setTimeout(() => {
       var updated: Array<Game> = this.state.games.filter(g => g.gameId !== game.gameId);
       this.setState({games: updated});
-    }, 10000); 
+    }, 5000); */ 
   }
 
   renderResult = (game: Game) => {
@@ -67,19 +76,9 @@ class GameList extends React.Component<IProps, IState> {
   };
 
   render(){
-    return (<div>
-        {this.state.games.map(function(game: Game){
-            var msg: string;
-            if(game.playerA.played){
-              msg = "Game Finished";
-            }else{
-              msg = "In progress"
-            }
-            return (
-            <div key={game.gameId} className='text-red-900'>
-              <div>{game.playerA.name} vs {game.playerB.name}</div>
-              <div>{msg}</div>
-            </div>)
+    return (<div className='flex-col justify-center text-center divide-y divide-gray-700 max-h-96 overflow-y-auto'>
+        {this.state.games.map(function(game: Game, index: number){
+            return(<GameRow key={index} game={game} />)
         })}
     </div>)
   } 

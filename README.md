@@ -8,7 +8,7 @@ This is a site I'm building as a demo for recruitment purposes. The site will ha
 
 The data is provided by a WebSocket that my back-end connects to and stores for a bit while also sending it to connected clients.
 
-## Tech stack (MERN)
+### :computer: Tech stack (MERN)
 
 - Front-end: React
 - Server: Node.js / Express

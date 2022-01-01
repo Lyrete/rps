@@ -6,7 +6,8 @@ interface IProps {
 }
 
 interface IState {
-  games: Array<Game>;
+  games: Map<string, Game>;
+  history: Array<Game>;
   socket?: Socket
 }
 
@@ -22,16 +23,26 @@ export interface Game {
     played?: String;
   }
   t: Number;
+  _id?: string;
 }
 
 class GameList extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props);        
-    this.state = {games: []};    
+    this.state = {games: new Map(), history: []};    
   }
 
   componentDidMount() {
     const socket: Socket = io('http://localhost:4000');
+
+    socket.on('recent', (msg) => {
+      this.setState({games: new Map([...this.state.games, ...msg])})
+    })
+
+    socket.on('history', (msg: Array<Game>) => {
+      this.setState({history: msg})
+    })
+
     socket.on('game', (msg) => {
       const game: Game = msg.gamedata;
       if(game.type === 'GAME_BEGIN'){        
@@ -48,18 +59,13 @@ class GameList extends React.Component<IProps, IState> {
   }
 
   newGame(game: Game) {
-    var previous: Array<Game> = this.state.games;
-    this.setState({games: [game].concat(previous)});
+    this.state.games.set(game.gameId, game);
+    this.setState({games:this.state.games});
   }
 
   resolveGame(game: Game) {
-    this.setState({games: this.state.games.map(function(element: Game){
-      if(element.gameId === game.gameId){
-        return game;
-      }
-      return element;
-    })});
-
+    this.state.games.set(game.gameId, game);
+    this.setState({games:this.state.games});
     //Show result for 5s and then delete
     /* setTimeout(() => {
       var updated: Array<Game> = this.state.games.filter(g => g.gameId !== game.gameId);
@@ -77,8 +83,8 @@ class GameList extends React.Component<IProps, IState> {
 
   render(){
     return (<div className='flex-col justify-center text-center divide-y divide-gray-700 max-h-96 overflow-y-auto'>
-        {this.state.games.map(function(game: Game, index: number){
-            return(<GameRow key={index} game={game} />)
+        {[...this.state.games].reverse().map(function(value, index){
+            return(<GameRow key={index} game={value[1]} />)
         })}
     </div>)
   } 

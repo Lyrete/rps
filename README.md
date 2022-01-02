@@ -18,6 +18,6 @@ The data is provided by a WebSocket that my back-end connects to and stores for 
 
 The MIT License (MIT)
 
-Copyright (c) 2015 Chris Kibble
+Copyright (c) 2022 Tommi Alajoki
 
 

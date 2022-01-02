@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "type": "module",
     "scripts": {
-        "postinstall": "(cd api && npm install); (cd app && npm install);"
+        "postinstall": "(cd api && npm install) && (cd ../app && npm install)"
     },
     "dependencies": {
         "ts-node": "^10.4.0"

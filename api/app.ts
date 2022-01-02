@@ -15,7 +15,7 @@ const app = express();
 const server = http.createServer(app);
 
 //Create the socket for our frontend
-const int_io : Socket = require('socket.io')(server, {cors: {origin: "http://localhost:3002", methods: ["GET", "POST"]}});
+const int_io : Socket = require('socket.io')(server, {cors: {origin: "http://localhost:3000", methods: ["GET", "POST"]}});
 
 //connect to the external ws
 const ext_ws = new WebSocket('wss://bad-api-assignment.reaktor.com/rps/live/');
@@ -65,8 +65,8 @@ app.get('/populatedata', async (req, res) => {
     while(cursor){        
         const response: APIResponse = await fetch(url + cursor).then(res => res.json());
         cursor = response.cursor
+        console.log(cursor);
         response.data.forEach(async game => {
-            console.log(cursor);
             await insertToDb(game);
         });
     }

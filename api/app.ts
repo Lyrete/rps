@@ -39,7 +39,7 @@ ext_ws.on('message', function message(data) {
     obj.t = obj.t || Date.now(); //Add time values to data that is missing it (aka GAME_BEGIN)    
     //console.log(obj); //Log received ws object for debug purposes
     recent.set(obj.gameId, obj); //Set the incoming game in our recent games
-    if(recent.size > 75){
+    if(recent.size > 10){
         const keyToRemove: string = recent.keys().next().value;
         const gameToRemove = recent.get(keyToRemove);
         if(gameToRemove){insertToDb(gameToRemove)} //Insert the game to db when we don't store it locally anymore

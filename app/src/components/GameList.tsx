@@ -13,14 +13,14 @@ interface IState {
 
 export interface Game {
   gameId: string;
-  type: String;
+  type: string;
   playerA: {
-    name: String;
-    played?: String;
+    name: string;
+    played?: string;
   }
   playerB: {
-    name: String;
-    played?: String;
+    name: string;
+    played?: string;
   }
   t: Number;
   _id?: string;
@@ -82,10 +82,13 @@ class GameList extends React.Component<IProps, IState> {
   };
 
   render(){
-    return (<div className='flex-col justify-center text-center divide-y divide-gray-700 max-h-96 overflow-y-auto'>
-        {[...this.state.games].reverse().map(function(value, index){
-            return(<GameRow key={index} game={value[1]} />)
-        })}
+    return (<div className='flex justify-center overflow-y-auto'>
+      <ul className='rounded-lg text-white-900 items-center'>
+          {[...this.state.games].reverse().map(function(value, index){
+                return(<GameRow key={index} game={value[1]} />)
+            })}
+      </ul>
+        
     </div>)
   } 
 }

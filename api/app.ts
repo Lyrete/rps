@@ -42,7 +42,7 @@ ext_ws.on('message', function message(data) {
     if(recent.size > 10){
         const keyToRemove: string = recent.keys().next().value;
         const gameToRemove = recent.get(keyToRemove);
-        if(gameToRemove){insertToDb(gameToRemove)} //Insert the game to db when we don't store it locally anymore
+        if(gameToRemove){insertToDb([gameToRemove])} //Insert the game to db when we don't store it locally anymore
         recent.delete(keyToRemove); //remove first element
         console.log('Shortened recent')
     }
@@ -65,10 +65,9 @@ app.get('/populatedata', async (req, res) => {
     while(cursor){        
         const response: APIResponse = await fetch(url + cursor).then(res => res.json());
         cursor = response.cursor
-        console.log(cursor);
-        response.data.forEach(async game => {
-            await insertToDb(game);
-        });
+        if(response.data.length > 0){
+            await insertToDb(response.data);
+        }        
     }
 
     console.log('db populated');

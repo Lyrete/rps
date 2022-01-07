@@ -24,6 +24,12 @@ export async function getHistory () {
     return history;
 }
 
-export async function insertToDb (data: IGame) {
-    await collection.updateOne({gameId: data.gameId},{$set: data},{upsert:true}); //Updates game in DB (or inserts it if not present)
+export async function insertToDb (data: IGame[]) {
+    const bulk = [];
+
+    for(const datum of data){
+        bulk.push({updateOne: {filter: {gameId:datum.gameId}, update: {"$set": datum}, upsert: true}});
+    }
+
+    collection.bulkWrite(bulk);
 }

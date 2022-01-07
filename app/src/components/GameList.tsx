@@ -66,11 +66,6 @@ class GameList extends React.Component<IProps, IState> {
   resolveGame(game: Game) {
     this.state.games.set(game.gameId, game);
     this.setState({games:this.state.games});
-    //Show result for 5s and then delete
-    /* setTimeout(() => {
-      var updated: Array<Game> = this.state.games.filter(g => g.gameId !== game.gameId);
-      this.setState({games: updated});
-    }, 5000); */ 
   }
 
   renderResult = (game: Game) => {
@@ -82,7 +77,7 @@ class GameList extends React.Component<IProps, IState> {
   };
 
   render(){
-    return (<div className='flex justify-center overflow-y-auto'>
+    return (<div className='flex justify-center overflow-hidden h-96'>
       <ul className='rounded-lg text-white-900 items-center'>
           {[...this.state.games].reverse().map(function(value, index){
                 return(<GameRow key={index} game={value[1]} />)

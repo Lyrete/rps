@@ -8,7 +8,7 @@ import fetch from 'node-fetch';
 //own imports
 import uuid from './helpers/uuid'
 import { connectToDatabase, getHistory, insertToDb } from './helpers/database';
-import { IGame } from './helpers/models/game';
+import Game, { IGame } from './helpers/models/game';
 
 //create express app and server
 const app = express();
@@ -35,7 +35,7 @@ int_io.on('connection', async (socket: Socket) => {
 });
 
 ext_ws.on('message', function message(data) {
-    const obj = JSON.parse(JSON.parse(data.toString())) //Parse incoming JSON (seems to be double encoded for some reason)    
+    const obj: Game = JSON.parse(JSON.parse(data.toString())) //Parse incoming JSON (seems to be double encoded for some reason)    
     obj.t = obj.t || Date.now(); //Add time values to data that is missing it (aka GAME_BEGIN)    
     //console.log(obj); //Log received ws object for debug purposes
     recent.set(obj.gameId, obj); //Set the incoming game in our recent games
@@ -44,7 +44,6 @@ ext_ws.on('message', function message(data) {
         const gameToRemove = recent.get(keyToRemove);
         if(gameToRemove){insertToDb([gameToRemove])} //Insert the game to db when we don't store it locally anymore
         recent.delete(keyToRemove); //remove first element
-        console.log('Shortened recent')
     }
     //Send all connected clients the received game's data
     int_io.emit('game', {gamedata: obj})    

@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 import * as mongoDB from 'mongodb';
-import Game, {IGame} from './models/game';
+import {IGame} from './models/game';
 
 export let collection: mongoDB.Collection;
 

@@ -45,11 +45,11 @@ class GameRow extends React.Component<GameProps, GameState> {
     render(){
         const color: string = this.checkWinner();
         return (<li className={`flex flex-col justify-center font-bold px-6 py-2 my-2 w-full rounded-md ${color}`}>
-            <div className='flex justify-center'>{this.props.game.t}</div>
-                <div className='flex justify-center w-full'>
-                    <div className='flex-grow'>{this.props.game.playerA.name}</div>
-                    <div className='flex-grow'>vs</div>
-                    <div>{this.props.game.playerB.name}</div>
+            <div className='flex justify-center relative'>{this.props.game.t}</div>
+                <div className='grid grid-flow-col w-full'>
+                    <div className=''>{this.props.game.playerA.name}</div>
+                    <div className='self-center'>vs</div>
+                    <div className='self-end'>{this.props.game.playerB.name}</div>
                 </div>
                 <div className='flex justify-center w-full'>
                     ({this.props.game.playerA.played})
